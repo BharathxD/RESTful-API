@@ -2,12 +2,14 @@ import express from "express";
 import config from "config";
 import connect from "./utils/connect";
 import log from "./utils/logger";
+import routes from "./routes";
 
-const PORT = config.get<number>('port')
+const PORT = config.get<number>("port");
 
 const app = express();
 
 app.listen(PORT, async () => {
-    log.info(`Listening on PORT: ${PORT}`)
-    await connect(); 
-})
+  log.info(`Listening on PORT: ${PORT}`);
+  await connect();
+  routes(app);
+});

@@ -1,16 +1,17 @@
 import mongoose from "mongoose";
 import config from "config";
+import logger from "./logger";
 
 const connect = async () => {
   const dbUri = config.get<string>("dbUri");
   mongoose.set('strictQuery', false)
   try {
-    console.log("Connecting to the Database...");
+    logger.info("Connecting to the Database...");
     await mongoose.connect(dbUri);
-    console.log("Database Connected ✅");
+    logger.info("Database Connected ✅");
   } catch (e) {
-    console.log("Could not connect to Database ❌");
-    console.log(e);
+    logger.error("Could not connect to Database ❌");
+    logger.error(e);
     process.exit(1);
   }
 };
