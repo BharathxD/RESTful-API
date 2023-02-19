@@ -4,7 +4,7 @@
     "target": "ESNext",
     /* Modules */
     "module": "commonjs",
-    "rootDir": "./src",
+    // "rootDir": "./src",
     "moduleResolution": "node",
     /* Emit */
     "outDir": "./dist",
