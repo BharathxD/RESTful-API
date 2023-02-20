@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 
 app.listen(PORT, async () => {
-  log.info(`Listening on PORT: ${PORT}`);
+  log.info(`Server Running on http://localhost:${PORT}`);
   await connect();
   routes(app);
 });

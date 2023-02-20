@@ -1,6 +1,7 @@
 import { DocumentDefinition } from "mongoose";
 import UserModel, { IUserDocument } from "../models/user.model";
 import { omit } from "lodash";
+import logger from "../utils/logger";
 // TypeScript definition
 
 export const createUser = async (
@@ -24,8 +25,12 @@ export const validatePassword = async ({
   password: string;
 }) => {
   const user = await UserModel.findOne({ email });
-  if (!user) return false;
+  if (!user) {
+    return false;
+  }
   const isValid = await user.comparePassword(password);
-  if (!isValid) return false;
-  return omit(user.toJSON(), "password ");
+  if (!isValid) {
+    return false;
+  }
+  return omit(user.toJSON,"password");
 };

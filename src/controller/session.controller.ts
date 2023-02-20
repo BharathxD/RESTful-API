@@ -3,18 +3,20 @@ import { validatePassword } from "../service/user.service";
 import { createSession } from "../service/session.service";
 import { signJWT } from "../utils/jwt.util";
 import config from "config";
-import { ObjectId } from "mongodb";
 import { LeanDocument } from "mongoose";
 import { ISessionDocument } from "../models/session.model";
-import { IUserDocument } from "../models/user.model";
+import logger from "../utils/logger";
 
 export const createUserSessionHandler = async (req: Request, res: Response) => {
   // Validating the users password
+  logger.info("Validating user...")
   const user = await validatePassword(req.body);
   // At this point, we know that user is a LeanDocument<IUserDocument> object
   if (!user || typeof user === "boolean") {
+    logger.error("Invalid email or password ❌")
     return res.status(401).send({ message: "Invalid email or password" });
   }
+  logger.info("User has been validated... ✅")
   // and can safely use it in the code.
   // Creating a session
   const session: LeanDocument<ISessionDocument> = await createSession(
