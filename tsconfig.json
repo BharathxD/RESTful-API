@@ -3,7 +3,7 @@
     /* Language and Environment */
     "target": "ESNext",
     /* Modules */
-    "module": "commonjs",
+    "module": "CommonJS",
     // "rootDir": "./src",
     "moduleResolution": "node",
     /* Emit */

@@ -1,11 +1,15 @@
 import { Request, Response } from "express";
 import logger from "../utils/logger";
 import { createUser } from "../service/user.service";
+import { createUserInput } from "../schema/user.schema";
 
-export const createUserHandler = async (req: Request, res: Response) => {
+export const createUserHandler = async (
+  req: Request<{}, {}, createUserInput["body"]>,
+  res: Response
+) => {
   try {
     const user = await createUser(req.body); // call user service
-    return user;
+    return res.send(user);
   } catch (error: any) {
     logger.error(error);
     res.status(409).send(error.message);
