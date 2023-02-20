@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
-import config from "config";
 import { IUserDocument } from "./user.model";
 
-export interface ISchemaDocument extends mongoose.Document {
+export interface ISessionDocument extends mongoose.Document {
   user: IUserDocument["_id"];
   valid: boolean;
   userAgent: string;
@@ -25,7 +23,7 @@ const SESSION = {
   },
 };
 
-const sessionSchema = new mongoose.Schema(SESSION, { timestamps: true });
+const sessionSchema = new mongoose.Schema<ISessionDocument>(SESSION, { timestamps: true });
 
 const sessionModel = mongoose.model("Session", sessionSchema);
 
