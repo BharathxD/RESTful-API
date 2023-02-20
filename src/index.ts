@@ -3,6 +3,8 @@ import config from "config";
 import connect from "./utils/connect";
 import log from "./utils/logger";
 import routes from "./routes";
+import dotenv from "dotenv";
+dotenv.config();
 
 const PORT = config.get<number>("port");
 

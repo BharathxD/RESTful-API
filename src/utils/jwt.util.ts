@@ -1,34 +1,44 @@
 import jwt from "jsonwebtoken";
 import config from "config";
 
-const privateKey = config.get<string>("privateKey");
-const publicKey = config.get<string>("publicKey");
-
-export const signJWT = (
+export function signJwt(
   object: Object,
+  keyName: "accessTokenPrivateKey" | "refreshTokenPrivateKey",
   options?: jwt.SignOptions | undefined
-) => {
-  // Sign JWT with Private Key
-  return jwt.sign(object, privateKey, {
+) {
+  console.log("SIGNIN KEY: ",config.get<string>(keyName))
+  const signingKey = Buffer.from(
+    config.get<string>(keyName),
+    "base64"
+  ).toString("ascii");
+
+  return jwt.sign(object, signingKey, {
     ...(options && options),
     algorithm: "RS256",
   });
-};
+}
 
-export const verifyJWT = (token: string) => {
-  // Sign JWT with Public Key
+export function verifyJwt(
+  token: string,
+  keyName: "accessTokenPublicKey" | "refreshTokenPublicKey"
+) {
+  const publicKey = Buffer.from(config.get<string>(keyName), "base64").toString(
+    "ascii"
+  );
+
   try {
     const decoded = jwt.verify(token, publicKey);
     return {
       valid: true,
       expired: false,
-      decoded: decoded,
+      decoded,
     };
-  } catch (error: any) {
+  } catch (e: any) {
+    console.error(e);
     return {
       valid: false,
-      expired: error.message === "jwt expired",
+      expired: e.message === "jwt expired",
       decoded: null,
     };
   }
-};
+}
