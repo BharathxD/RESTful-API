@@ -23,7 +23,9 @@ const SESSION = {
   },
 };
 
-const sessionSchema = new mongoose.Schema<ISessionDocument>(SESSION, { timestamps: true });
+const sessionSchema = new mongoose.Schema<ISessionDocument>(SESSION, {
+  timestamps: true,
+});
 
 const sessionModel = mongoose.model("Session", sessionSchema);
 
