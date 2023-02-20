@@ -10,7 +10,7 @@ export const createUserHandler = async (
 ) => {
   try {
     const user = await createUser(req.body); // call user service
-    return res.send(omit(user.toJSON(), "password"));
+    return res.send(omit(user, "password"));
   } catch (error: any) {
     logger.error(error);
     res.status(409).send(error.message);

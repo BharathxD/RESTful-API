@@ -2,4 +2,27 @@ export default {
   port: 3000,
   dbUri: "mongodb://127.0.0.1:27017/rest-api-tutorial",
   saltWorkFactor: 10,
+  accessTokenTimeToLive: "15m",
+  refreshTokenTimeToLive: "1y",
+  privateKey: `-----BEGIN RSA PRIVATE KEY-----
+   MIICWwIBAAKBgQDLlHsKjTUYZNZBv1wt/8ZowhpBhCUvcExdk+42s56YXMIu4zPJ
+   8TvEUka4oV9iNy2yfp8jafPzSkKqqkf2BrUI1xTmXYESKOrDVBSX5tRvSRCDOJpg
+   tFZ7ASeJbVPAHXTj7lOfzVE4fhcH+gInRXr2JJlENfTI+/SP9++nDH2SmQIDAQAB
+   AoGAGdBMAbyB/QPcPx36nEKQb/wcxC3zYR6GMF9vlzQTahJo9PUOPg7+mxgrq4Ga
+   zKNeggGYQC9RJYpHBcjtsv6KucgV6a2fQqo/TtZwpDmJS0Wbk5KGPoEAUL4OjXSs
+   20iN2YNlWnficjE/SLfvCLCvlafRHxF0H3MxS1tj8BsECwECQQD6sv/4oAap5LJ8
+   Angp+mR/kCFqtQSeouB8uDbJdPgkKsCp3Ivj0LpjHNMVQHGgzFsDrnR+Iwt2TV+z
+   T0p3KL0RAkEAz+JuU1oqkGY1omwej8QlEWCNuxwZ/28o9Di/x5iLTbm3SLCRAk24
+   tVU1mG0ob6AODeqpMUhRCyT7/+N5JGQdCQJAQ4FVma4FfVPel7PWhX8t9odp6CDM
+   GKdFCXBVGFQNyTdV36dKZ9K5jZyiXhOXRTQhwdEE/z4ShQ16mn7cT0/B8QJAdc/Y
+   QGqoFp+mI79sboN1kmyKxhB991Hy/r0uipo70DfA1HQkKg8L79AziIfMU758WIy1
+   iBV4wH0cR3+Nxv7pqQJAG03dspTP+ARQm+6OLWviaI1oQ8ekQ4boIe1XtWaiX2Lh
+   BML6jbtYFh5QxSFnbYPIwtKhhxE8qA1y+w/6yENjgw==
+   -----END RSA PRIVATE KEY-----`,
+  publicKey: `-----BEGIN PUBLIC KEY-----
+  MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDLlHsKjTUYZNZBv1wt/8ZowhpB
+  hCUvcExdk+42s56YXMIu4zPJ8TvEUka4oV9iNy2yfp8jafPzSkKqqkf2BrUI1xTm
+  XYESKOrDVBSX5tRvSRCDOJpgtFZ7ASeJbVPAHXTj7lOfzVE4fhcH+gInRXr2JJlE
+  NfTI+/SP9++nDH2SmQIDAQAB
+  -----END PUBLIC KEY-----`,
 };

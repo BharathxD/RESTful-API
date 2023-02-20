@@ -27,11 +27,13 @@ const USER = {
   },
 };
 
-const userSchema = new mongoose.Schema<IUserDocument>(USER, { timestamps: true });
+const userSchema = new mongoose.Schema<IUserDocument>(USER, {
+  timestamps: true,
+});
 
 // Pre-Save hook
 
-userSchema.pre("save", async function(this: IUserDocument, next) {
+userSchema.pre("save", async function (this: IUserDocument, next) {
   if (!this.isModified("password")) {
     return next();
   }
@@ -40,7 +42,6 @@ userSchema.pre("save", async function(this: IUserDocument, next) {
   this.password = hash;
   next();
 });
-
 
 userSchema.methods.comparePassword = async (
   password: string
