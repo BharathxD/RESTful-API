@@ -11,7 +11,7 @@ export interface IUserDocument extends mongoose.Document {
   comparePassword: (password: string) => Promise<boolean>;
 }
 
-const user = {
+const USER = {
   email: {
     type: String,
     require: true,
@@ -27,20 +27,20 @@ const user = {
   },
 };
 
-const userSchema = new mongoose.Schema(user, { timestamps: true });
+const userSchema = new mongoose.Schema<IUserDocument>(USER, { timestamps: true });
 
 // Pre-Save hook
 
-userSchema.pre("save", async (next) => {
-  let user = this as unknown as IUserDocument;
-  if (!user.isModified("password")) {
+userSchema.pre("save", async function(this: IUserDocument, next) {
+  if (!this.isModified("password")) {
     return next();
   }
   const salt = await bcrypt.genSalt(config.get<number>("saltWorkFactor"));
-  const hash = hashSync(user.password, salt);
-  user.password = hash;
+  const hash = hashSync(this.password, salt);
+  this.password = hash;
   next();
 });
+
 
 userSchema.methods.comparePassword = async (
   password: string
