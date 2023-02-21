@@ -1,7 +1,9 @@
-import { Request, Response } from "express";
-
 import sessionModel, { ISessionDocument } from "../models/session.model";
 import { FilterQuery, UpdateQuery } from "mongoose";
+import { verifyJwt, signJwt } from "../utils/jwt.util";
+import { get } from "lodash";
+import { findUser } from "./user.service";
+import config from "config";
 
 export async function createSession(userId: string, userAgent: string) {
   const session = await sessionModel.create({ user: userId, userAgent });
@@ -18,4 +20,24 @@ export const updateSession = async (
   update: UpdateQuery<ISessionDocument>
 ) => {
   return sessionModel.updateOne(query, update);
+};
+export const reIssueAccessToken = async ({
+  refreshToken,
+}: {
+  refreshToken: string;
+}) => {
+  const { decoded } = verifyJwt(refreshToken, "refreshTokenPublicKey");
+  if (!decoded || !get(decoded, "session")) return false;
+  const session = await sessionModel.findById(get(decoded, "_id"));
+  if (!session || !session.valid) return false;
+  const user = await findUser({ _id: session.user });
+  if (!user) return false;
+
+  const accessToken = signJwt(
+    { ...user, session: session._id },
+    "accessTokenPrivateKey",
+    { expiresIn: config.get("accessTokenTtl") } // 15 minutes
+  );
+
+  return accessToken;
 };

@@ -1,4 +1,4 @@
-import { DocumentDefinition } from "mongoose";
+import { DocumentDefinition, FilterQuery } from "mongoose";
 import UserModel, { IUserDocument } from "../models/user.model";
 import { omit } from "lodash";
 import logger from "../utils/logger";
@@ -33,4 +33,8 @@ export const validatePassword = async ({
     return false;
   }
   return omit(user.toJSON(), "password");
+};
+
+export const findUser = async (query: FilterQuery<IUserDocument>) => {
+  return UserModel.findOne(query).lean();
 };

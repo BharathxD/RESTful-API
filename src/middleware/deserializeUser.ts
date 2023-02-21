@@ -1,23 +1,42 @@
-import { verifyJwt } from "../utils/jwt.util";
 import { get } from "lodash";
 import { Request, Response, NextFunction } from "express";
-import { DefaultDeserializer } from "v8";
+import { verifyJwt } from "../utils/jwt.util";
+import { reIssueAccessToken } from "../service/session.service";
 
-const deserializeUser = (req: Request, res: Response, next: NextFunction) => {
+const deserializeUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const accessToken = get(req, "headers.authorization", "").replace(
     /^Bearer\s/,
     ""
   );
-  // Bearer of the system gets access to the token, so we're gonna remove/replace it
+
+  const refreshToken = get(req, "headers.x-refresh");
+
   if (!accessToken) {
     return next();
   }
+
   const { decoded, expired } = verifyJwt(accessToken, "accessTokenPublicKey");
 
   if (decoded) {
     res.locals.user = decoded;
     return next();
-    // This is goin to attach the user to the res.locals.user
+  }
+
+  if (expired && refreshToken) {
+    const newAccessToken = await reIssueAccessToken({refreshToken});
+
+    if (newAccessToken) {
+      res.setHeader("x-access-token", newAccessToken);
+    }
+
+    const result = verifyJwt(newAccessToken as string, "accessTokenPublicKey");
+
+    res.locals.user = result.decoded;
+    return next();
   }
 
   return next();
