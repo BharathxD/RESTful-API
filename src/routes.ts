@@ -4,6 +4,7 @@ import validate from "./middleware/validateResource";
 import { createUserSchema } from "./schema/user.schema";
 import {
   createUserSessionHandler,
+  deleteSessionHandler,
   getUserSessionHandler,
 } from "./controller/session.controller";
 import createSessionSchema from "./schema/session.schema";
@@ -20,6 +21,7 @@ const routes = (app: Express) => {
     createUserSessionHandler
   );
   app.get("/api/sessions", requireUser, getUserSessionHandler);
+  app.delete("/api/sessions", requireUser, deleteSessionHandler);
 };
 
 export default routes;
