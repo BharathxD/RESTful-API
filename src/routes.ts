@@ -2,8 +2,12 @@ import { Express, Request, Response } from "express";
 import { createUserHandler } from "./controller/user.controller";
 import validate from "./middleware/validateResource";
 import { createUserSchema } from "./schema/user.schema";
-import { createUserSessionHandler } from "./controller/session.controller";
+import {
+  createUserSessionHandler,
+  getUserSessionHandler,
+} from "./controller/session.controller";
 import createSessionSchema from "./schema/session.schema";
+import requireUser from "./middleware/requireUser";
 
 const routes = (app: Express) => {
   app.get("/healthcheck", (req: Request, res: Response) => {
@@ -15,6 +19,7 @@ const routes = (app: Express) => {
     validate(createSessionSchema),
     createUserSessionHandler
   );
+  app.get("/api/sessions", requireUser, getUserSessionHandler);
 };
 
 export default routes;

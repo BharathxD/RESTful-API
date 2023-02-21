@@ -1,6 +1,7 @@
 import { verifyJwt } from "../utils/jwt.util";
 import { get } from "lodash";
 import { Request, Response, NextFunction } from "express";
+import { DefaultDeserializer } from "v8";
 
 const deserializeUser = (req: Request, res: Response, next: NextFunction) => {
   const accessToken = get(req, "headers.authorization", "").replace(
@@ -18,4 +19,8 @@ const deserializeUser = (req: Request, res: Response, next: NextFunction) => {
     return next();
     // This is goin to attach the user to the res.locals.user
   }
+
+  return next();
 };
+
+export default deserializeUser;

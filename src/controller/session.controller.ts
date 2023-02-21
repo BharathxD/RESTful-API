@@ -4,8 +4,6 @@ import { createSession, findSession } from "../service/session.service";
 import { signJwt } from "../utils/jwt.util";
 import config from "config";
 import logger from "../utils/logger";
-import { ISessionDocument } from "../models/session.model";
-import { LeanDocument } from "mongoose";
 
 export const createUserSessionHandler = async (req: Request, res: Response) => {
   // Validating the users password
@@ -42,6 +40,6 @@ export const createUserSessionHandler = async (req: Request, res: Response) => {
 
 export const getUserSessionHandler = async (req: Request, res: Response) => {
   const userID = res.locals.user._id;
-  const sessions = await findSession({ user: userID, valid: false });
-  return res.send({ sessions });
+  const sessions = await findSession({ user: userID, valid: true });
+  return res.send(sessions);
 };

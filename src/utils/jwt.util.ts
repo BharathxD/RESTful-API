@@ -6,7 +6,6 @@ export function signJwt(
   keyName: "accessTokenPrivateKey" | "refreshTokenPrivateKey",
   options?: jwt.SignOptions | undefined
 ) {
-  console.log("SIGNIN KEY: ",config.get<string>(keyName))
   const signingKey = Buffer.from(
     config.get<string>(keyName),
     "base64"
