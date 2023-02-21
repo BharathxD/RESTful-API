@@ -13,10 +13,3 @@ export const findSession = async (query: FilterQuery<ISessionDocument>) => {
   return sessionModel.find(query).lean();
 };
 
-export async function deleteSessionHandler(req: Request, res: Response) {
-  const sessionID = res.locals.user.session;
-  return res.send({
-    accessToken: null,
-    refreshToken: null,
-  });
-}
