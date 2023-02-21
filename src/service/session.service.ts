@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import sessionModel, { ISessionDocument } from "../models/session.model";
-import { FilterQuery } from "mongoose";
+import { FilterQuery, UpdateQuery } from "mongoose";
 
 export async function createSession(userId: string, userAgent: string) {
   const session = await sessionModel.create({ user: userId, userAgent });
@@ -13,3 +13,9 @@ export const findSession = async (query: FilterQuery<ISessionDocument>) => {
   return sessionModel.find(query).lean();
 };
 
+export const updateSession = async (
+  query: FilterQuery<ISessionDocument>,
+  update: UpdateQuery<ISessionDocument>
+) => {
+  return sessionModel.updateOne(query, update);
+};
