@@ -32,15 +32,15 @@ const PRODUCT = {
     required: true,
   },
   description: {
-    type: String, 
+    type: String,
     required: true,
   },
   price: {
-    type: Number, 
+    type: Number,
     required: true,
   },
   image: {
-    type: String, 
+    type: String,
     required: true,
   },
 };

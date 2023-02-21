@@ -25,14 +25,58 @@ export const createProductHandler = async (
   res.send({ product });
 };
 
-export const findProductHandler = async (
+export const updateProductHandler = async (
   req: Request<GetProductInput["params"]>,
   res: Response
-) => {};
+) => {
+  const userId = res.locals.user._id;
 
-export const updateProductHandler = async (
-  req: Request<{}, {}, UpdateProductInput["params"]>,
+  const productId = req.params.productId;
+  const update = req.body;
+
+  const product = await findProduct({ productId });
+
+  if (!product) {
+    res.sendStatus(404);
+  }
+
+  if (product?.user !== userId) {
+    res.sendStatus(403);
+    // Client is forbidden from accessing a valid URL
+  }
+
+  const updatedProduct = await findAndUpdateProduct({ productId }, update, {
+    new: true,
+  });
+
+  res.send({ updatedProduct });
+};
+
+export const getProductHandler = async (
+  req: Request<DeleteroductInput["params"]>,
   res: Response
 ) => {};
 
-export const deleteProductHandler = async (req: Request, res: Response) => {};
+export const deleteProductHandler = async (
+  req: Request<DeleteroductInput["params"]>,
+  res: Response
+) => {
+  const userId = res.locals.user._id;
+
+  const productId = req.params.productId;
+
+  const product = await findProduct({ productId });
+
+  if (!product) {
+    res.sendStatus(404);
+  }
+
+  if (product?.user !== userId) {
+    res.sendStatus(403);
+    // Client is forbidden from accessing a valid URL
+  }
+
+  await deleteProduct({ productId });
+
+  res.sendStatus(200);
+};
