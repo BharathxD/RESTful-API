@@ -26,7 +26,7 @@ export const createProductHandler = async (
 };
 
 export const updateProductHandler = async (
-  req: Request<GetProductInput["params"]>,
+  req: Request<UpdateProductInput["params"]>,
   res: Response
 ) => {
   const userId = res.locals.user._id;
@@ -53,9 +53,16 @@ export const updateProductHandler = async (
 };
 
 export const getProductHandler = async (
-  req: Request<DeleteroductInput["params"]>,
+  req: Request<GetProductInput["params"]>,
   res: Response
-) => {};
+) => {
+  const productId = req.params.productId;
+  const product = findProduct({ productId });
+  if (!product) {
+    res.sendStatus(404);
+  }
+  return res.send(product);
+};
 
 export const deleteProductHandler = async (
   req: Request<DeleteroductInput["params"]>,

@@ -20,7 +20,7 @@ const PRODUCT = {
     required: true,
     unique: true,
     default: () => {
-      `product_${nanoId()}`;
+      `product_${nanoId}`;
     },
   },
   user: {
