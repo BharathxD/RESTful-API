@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt, { hashSync } from "bcrypt";
 import config from "config";
+import logger from "../utils/logger";
 
 export interface IUserDocument extends mongoose.Document {
   email: string;
@@ -34,13 +35,18 @@ const userSchema = new mongoose.Schema<IUserDocument>(USER, {
 // Pre-Save hook
 
 userSchema.pre("save", async function (this: IUserDocument, next) {
-  if (!this.isModified("password")) {
-    return next();
+  try {
+    if (!this.isModified("password")) {
+      return next();
+    }
+    const salt = await bcrypt.genSalt(config.get<number>("saltWorkFactor"));
+    const hash = hashSync(this.password, salt);
+    this.password = hash;
+  } catch (error: any) {
+    logger.error(error.message);
+  } finally {
+    next();
   }
-  const salt = await bcrypt.genSalt(config.get<number>("saltWorkFactor"));
-  const hash = hashSync(this.password, salt);
-  this.password = hash;
-  next();
 });
 
 userSchema.methods.comparePassword = async function (
