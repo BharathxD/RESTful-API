@@ -25,7 +25,7 @@ export const findAndUpdateProduct = async (
   options: QueryOptions
 ) => {
   return productModel.findOneAndUpdate(query, update, options);
-};
+}
 
 export const deleteProduct = async (query: FilterQuery<IProductDocument>) => {
   return productModel.deleteOne(query);

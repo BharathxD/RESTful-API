@@ -7,10 +7,10 @@ const validate =
     try {
       // Checking the schema
       schema.parse({
-        body: req.body,
+        body: JSON.parse(req.body),
         query: req.query,
         params: req.params,
-      });
+      })
       next();
     } catch (error: any) {
       return res.status(400).send(error.errors);

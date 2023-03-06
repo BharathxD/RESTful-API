@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 import { customAlphabet } from "nanoid";
 import { IUserDocument } from "./user.model";
 
-const nanoId = customAlphabet("abcdefghijklmnopqrstuvxyz1234567890", 10);
+// const nanoId = customAlphabet("abcdefghijklmnopqrstuvxyz1234567890", 10);
+const nanoId = "abcdefghijklmnopqrstuvxyz1234567890";
 
 export interface IProductDocument extends mongoose.Document {
   user: IUserDocument["_id"];
