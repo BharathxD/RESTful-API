@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import {
   createProduct,
   findAndUpdateProduct,
@@ -72,22 +72,24 @@ export const deleteProductHandler = async (
   req: Request<DeleteroductInput["params"]>,
   res: Response
 ) => {
-  const userId = res.locals.user._id;
+  try {
+    const userId = res.locals.user._id;
 
-  const productId = req.params.productId;
+    const productId = req.params.productId;
 
-  const product = await findProduct({ productId });
+    const product = await findProduct({ productId });
 
-  if (!product) {
-    res.sendStatus(404);
+    if (!product) {
+      throw new Error("The product has not been found");
+    }
+
+    if (product?.user !== userId) {
+      throw new Error("The user is not authorized to do this operation");
+      // Client is forbidden from accessing a valid URL
+    }
+    const result = await deleteProduct({ productId });
+    res.status(200).send({ message: result });
+  } catch (error: any) {
+    res.status(404).send({ message: error.message });
   }
-
-  if (product?.user !== userId) {
-    res.sendStatus(403);
-    // Client is forbidden from accessing a valid URL
-  }
-
-  await deleteProduct({ productId });
-
-  res.sendStatus(200);
 };
