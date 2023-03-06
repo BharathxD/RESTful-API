@@ -74,16 +74,12 @@ export const deleteProductHandler = async (
 ) => {
   try {
     const userId = res.locals.user._id;
-
     const productId = req.params.productId;
-
     const product = await findProduct({ productId });
-
     if (!product) {
       throw new Error("The product has not been found");
     }
-
-    if (product?.user !== userId) {
+    if (product.user !== userId) {
       throw new Error("The user is not authorized to do this operation");
       // Client is forbidden from accessing a valid URL
     }
