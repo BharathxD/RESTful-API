@@ -9,7 +9,7 @@ export const createUserHandler = async (
   res: Response
 ) => {
   try {
-    const body = JSON.parse(req.body.toString());
+    const { body } = req;
     const user = await createUser(body); // call user service
     return res.send(omit(user, "password"));
   } catch (error: any) {
