@@ -56,12 +56,16 @@ export const getProductHandler = async (
   req: Request<GetProductInput["params"]>,
   res: Response
 ) => {
-  const productId = req.params.productId;
-  const product = findProduct({ productId });
-  if (!product) {
-    res.sendStatus(404);
+  try {
+    const productId = req.params.productId;
+    const product = findProduct({ productId });
+    if (!product) {
+      throw new Error("The product doesn't exist");
+    }
+    return res.status(200).send(product);
+  } catch (error: any) {
+    res.status(404).send({ message: error.message });
   }
-  return res.send(product);
 };
 
 export const deleteProductHandler = async (
