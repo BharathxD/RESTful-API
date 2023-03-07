@@ -29,27 +29,31 @@ export const updateProductHandler = async (
   req: Request<UpdateProductInput["params"]>,
   res: Response
 ) => {
-  const userId = res.locals.user._id;
+  try {
+    const userId = res.locals.user._id;
 
-  const productId = req.params.productId;
-  const update = req.body;
+    const productId = req.params.productId;
+    const update = req.body;
 
-  const product = await findProduct({ productId });
+    const product = await findProduct({ productId });
 
-  if (!product) {
-    res.sendStatus(404);
+    if (!product) {
+      throw new Error("The product is not found");
+    }
+
+    if (product?.user !== userId) {
+      throw new Error("The user is not authorized to do that");
+      // Client is forbidden from accessing a valid URL
+    }
+
+    const updatedProduct = await findAndUpdateProduct({ productId }, update, {
+      new: true,
+    });
+
+    res.status(200).send({ updatedProduct });
+  } catch (error: any) {
+    res.status(404).send({ message: error.message });
   }
-
-  if (product?.user !== userId) {
-    res.sendStatus(403);
-    // Client is forbidden from accessing a valid URL
-  }
-
-  const updatedProduct = await findAndUpdateProduct({ productId }, update, {
-    new: true,
-  });
-
-  res.send({ updatedProduct });
 };
 
 export const getProductHandler = async (
