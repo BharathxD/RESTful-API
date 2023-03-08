@@ -81,19 +81,26 @@ export const deleteProductHandler = async (
   res: Response
 ) => {
   try {
-    const userId = res.locals.user._id;
-    const productId = req.params.productId;
+    const { _id: userId } = res.locals.user;
+    const { productId } = req.params;
+
     const product = await findProduct({ productId });
+
     if (!product) {
-      throw new Error("The product has not been found");
+      return res.status(404).send({ message: "Product not found" });
     }
+
     if (product.user !== userId) {
-      throw new Error("The user is not authorized to do this operation");
-      // Client is forbidden from accessing a valid URL
+      return res
+        .status(403)
+        .send({ message: "User is not authorized to delete this product" });
     }
+
     const result = await deleteProduct({ productId });
-    res.status(200).send({ message: result });
-  } catch (error: any) {
-    res.status(404).send({ message: error.message });
+
+    return res.status(200).send({ message: "Product deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: "Something went wrong" });
   }
 };
