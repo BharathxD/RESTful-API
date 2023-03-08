@@ -16,13 +16,17 @@ export const createProductHandler = async (
   req: Request<{}, {}, CreateProductInput["body"]>,
   res: Response
 ) => {
-  const userId = res.locals.user._id;
+  try {
+    const { _id: userId } = res.locals.user;
+    const { body } = req;
 
-  const body = req.body;
+    const product = await createProduct({ ...body, user: userId });
 
-  const product = await createProduct({ ...body, user: userId });
-
-  res.send({ product });
+    res.send({ product });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Something went wrong");
+  }
 };
 
 export const updateProductHandler = async (
