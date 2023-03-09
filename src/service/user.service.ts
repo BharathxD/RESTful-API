@@ -10,10 +10,11 @@ export const createUser = async (
   >
 ) => {
   try {
-    const user = UserModel.create(input);
-    return omit((await user).toJSON, "password");
+    const user = await UserModel.create(input);
+    return omit(user.toJSON(), "password");
   } catch (error: any) {
-    throw new Error(error);
+    logger.error("Failed to create user", { error });
+    return { error: error.message };
   }
 };
 
