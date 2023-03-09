@@ -37,5 +37,11 @@ export const validatePassword = async ({
 };
 
 export const findUser = async (query: FilterQuery<IUserDocument>) => {
-  return UserModel.findOne(query).lean();
+  try {
+    const user = await UserModel.findOne(query);
+    return user;
+  } catch (error: any) {
+    logger.error("Failed to find user", { error });
+    return { error: error.message };
+  }
 };
