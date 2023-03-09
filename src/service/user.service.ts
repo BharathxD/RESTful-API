@@ -1,4 +1,4 @@
-import { DocumentDefinition, FilterQuery } from "mongoose";
+import mongoose, { DocumentDefinition, FilterQuery } from "mongoose";
 import UserModel, { IUserDocument } from "../models/user.model";
 import { omit } from "lodash";
 import logger from "../utils/logger";
@@ -11,10 +11,18 @@ export const createUser = async (
 ) => {
   try {
     const user = await UserModel.create(input);
-    return omit(user.toJSON(), "password");
+    const { password, ...userWithoutPassword } = user.toJSON();
+    return userWithoutPassword;
   } catch (error: any) {
-    logger.error("Failed to create user", { error });
-    return { error: error.message };
+    if (error instanceof mongoose.Error.ValidationError) {
+      logger.error("Failed to create user: validation error", { error });
+      return { error: error.message };
+    } else if (error instanceof mongoose.Error.MongoError) {
+      logger.error("Failed to create user: mongo error", { error });
+      return { error: "Failed to create user" };
+    }
+    logger.error("Failed to create user: unknown error", { error });
+    return { error: "Failed to create user" };
   }
 };
 
